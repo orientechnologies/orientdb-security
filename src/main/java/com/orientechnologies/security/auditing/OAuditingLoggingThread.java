@@ -22,6 +22,7 @@ package com.orientechnologies.security.auditing;
 import com.orientechnologies.common.util.OCallable;
 import com.orientechnologies.orient.core.Orient;
 import com.orientechnologies.orient.core.db.ODatabase;
+import com.orientechnologies.orient.core.exception.OSchemaException;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OSchema;
 import com.orientechnologies.orient.core.record.impl.ODocument;
@@ -62,11 +63,25 @@ public class OAuditingLoggingThread extends Thread {
     server.getSystemDatabase().executeInDBScope(new OCallable<Void, ODatabase>() {
       @Override
       public Void call(ODatabase iArgument) {
-        OSchema schema = iArgument.getMetadata().getSchema();
+        final OSchema schema = iArgument.getMetadata().getSchema();
+        schema.reload();
+
         if (!schema.existsClass(className)) {
           OClass clazz = schema.getClass(ODefaultAuditing.AUDITING_LOG_CLASSNAME);
-          OClass cls = schema.createClass(className, clazz);
-          cls.createIndex(className + ".date", OClass.INDEX_TYPE.NOTUNIQUE, new String[] { "date" });
+
+          try {
+            OClass cls = schema.createClass(className, clazz);
+            try {
+              cls.createIndex(className + ".date", OClass.INDEX_TYPE.NOTUNIQUE, new String[] { "date" });
+            } catch (OSchemaException e) {
+              if (!e.getMessage().contains("already exists"))
+                throw e;
+            }
+          } catch (RuntimeException e) {
+            if (!e.getMessage().contains("already exists"))
+              throw e;
+          }
+
         }
         return null;
       }
