@@ -21,11 +21,7 @@ package com.orientechnologies.security.auditing;
 
 import com.orientechnologies.common.log.OLogManager;
 import com.orientechnologies.orient.core.Orient;
-import com.orientechnologies.orient.core.db.ODatabase;
-import com.orientechnologies.orient.core.db.ODatabaseDocumentInternal;
-import com.orientechnologies.orient.core.db.ODatabaseInternal;
-import com.orientechnologies.orient.core.db.ODatabaseLifecycleListener;
-import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal;
+import com.orientechnologies.orient.core.db.*;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.metadata.schema.OClass;
 import com.orientechnologies.orient.core.metadata.schema.OSchema;
@@ -354,7 +350,11 @@ public class ODefaultAuditing implements OAuditingService, ODatabaseLifecycleLis
         globalHook.log(operation, dbName, username, message);
       }
     } else { // Use the global hook.
-      globalHook.log(operation, dbName, username, message);
+      if (globalHook == null)
+        OLogManager.instance().error(this, "Default Auditing is disabled, cannot log: op=%s db='%s' user=%s message='%s'",
+            operation, dbName, username, message);
+      else
+        globalHook.log(operation, dbName, username, message);
     }
   }
 
