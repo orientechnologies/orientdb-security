@@ -18,70 +18,42 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.orientechnologies</groupId>
-	<artifactId>orientdb-security</artifactId>
-	<version>2.2.18-SNAPSHOT</version>
-	<packaging>jar</packaging>
 
-	<properties>
-		<javac.src.version>1.6</javac.src.version>
-		<javac.target.version>1.6</javac.target.version>
-		<orientdb.version>${project.version}</orientdb.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+    <parent>
+        <groupId>com.orientechnologies</groupId>
+        <artifactId>orientdb-parent</artifactId>
+        <version>2.2.18-SNAPSHOT</version>
+        <relativePath/>
+    </parent>
 
-	<name>OrientDB Security Plugin</name>
-	<description>OrientDB Security Plugin</description>
-	<url>http://maven.apache.org</url>
-	<inceptionYear>2016</inceptionYear>
+    <artifactId>orientdb-security</artifactId>
 
-	<build>
-		<plugins>
-			<!-- Currently not needed, but leave for future uses.
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptors>
-						<descriptor>src/main/assembly/assembly.xml</descriptor>
-					</descriptors>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration></configuration>
-					</execution>
-				</executions>
-			</plugin> -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <packaging>jar</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.orientechnologies</groupId>
-			<artifactId>orientdb-core</artifactId>
-			<version>${orientdb.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.orientechnologies</groupId>
-			<artifactId>orientdb-server</artifactId>
-			<version>${orientdb.version}</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+    <name>OrientDB Security Plugin</name>
+    <description>OrientDB Security Plugin</description>
+    <url>http://maven.apache.org</url>
+    <inceptionYear>2016</inceptionYear>
+
+    <properties>
+        <!--Overrides parent pom's location-->
+        <license.location>https://github.com/orientechnologies/orientdb/raw/develop/ODB-ASL-LICENSE.txt</license.location>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.orientechnologies</groupId>
+            <artifactId>orientdb-core</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.orientechnologies</groupId>
+            <artifactId>orientdb-server</artifactId>
+            <version>${project.parent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
