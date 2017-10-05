@@ -63,7 +63,7 @@ public class OSecurityPlugin extends OServerPluginAbstract {
         server.getSecurity().registerSecurityClass(OLDAPImporter.class);
       }
     } catch (Throwable th) {
-      OLogManager.instance().error(this, "registerSecurityComponents() Throwable: " + th);
+      OLogManager.instance().error(this, "registerSecurityComponents() Throwable: " + th, th);
     }
   }
 
@@ -76,7 +76,7 @@ public class OSecurityPlugin extends OServerPluginAbstract {
         server.getSecurity().unregisterSecurityClass(OLDAPImporter.class);
       }
     } catch (Throwable th) {
-      OLogManager.instance().error(this, "unregisterSecurityComponents() Throwable: " + th);
+      OLogManager.instance().error(this, "unregisterSecurityComponents() Throwable: " + th, th);
     }
   }
 }

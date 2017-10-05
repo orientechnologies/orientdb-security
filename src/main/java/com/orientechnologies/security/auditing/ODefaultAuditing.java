@@ -136,7 +136,7 @@ public class ODefaultAuditing implements OAuditingService, ODatabaseLifecycleLis
       final InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(DEFAULT_FILE_AUDITING_DB_CONFIG);
 
       if (resourceAsStream == null)
-        OLogManager.instance().error(this, "defaultHook() resourceAsStream is null");
+        OLogManager.instance().error(this, "defaultHook() resourceAsStream is null", null);
 
       content = getString(resourceAsStream);
       if (auditingFileConfig != null) {
@@ -352,7 +352,7 @@ public class ODefaultAuditing implements OAuditingService, ODatabaseLifecycleLis
     } else { // Use the global hook.
       if (globalHook == null)
         OLogManager.instance().error(this, "Default Auditing is disabled, cannot log: op=%s db='%s' user=%s message='%s'",
-            operation, dbName, username, message);
+            null, operation, dbName, username, message);
       else
         globalHook.log(operation, dbName, username, message);
     }
@@ -380,7 +380,7 @@ public class ODefaultAuditing implements OAuditingService, ODatabaseLifecycleLis
         cls.createProperty("database", OType.STRING);
       }
     } catch (Exception e) {
-      OLogManager.instance().error(this, "Creating auditing class exception: %s", e.getMessage());
+      OLogManager.instance().error(this, "Creating auditing class exception: %s", e, e.getMessage());
     } finally {
     	if (sysdb != null) sysdb.close();    	
 
@@ -447,7 +447,7 @@ public class ODefaultAuditing implements OAuditingService, ODatabaseLifecycleLis
         systemDbImporter = new OSystemDBImporter(server, sysImport);
       }
     } catch (Exception ex) {
-      OLogManager.instance().error(this, "config() Exception: %s", ex.getMessage());
+      OLogManager.instance().error(this, "config() Exception: %s", ex, ex.getMessage());
     }
   }
 

@@ -21,14 +21,12 @@ package com.orientechnologies.security.auditing;
 
 import com.orientechnologies.common.log.OLogManager;
 import com.orientechnologies.orient.core.Orient;
-import com.orientechnologies.orient.core.db.ODatabase;
 import com.orientechnologies.orient.core.db.ODatabaseInternal;
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx;
 import com.orientechnologies.orient.core.metadata.schema.OType;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.sql.OCommandSQL;
 import com.orientechnologies.orient.server.OServer;
-import com.orientechnologies.orient.server.OSystemDatabase;
 
 import java.util.List;
 
@@ -65,7 +63,7 @@ public class OSystemDBImporter extends Thread {
         sleepPeriod = jsonConfig.field("sleepPeriod");
       }
     } catch (Exception ex) {
-      OLogManager.instance().error(this, "OSystemDBImporter() Exception: %s", ex.getMessage());
+      OLogManager.instance().error(this, "OSystemDBImporter() Exception: %s", ex, ex.getMessage());
     }
     
     setDaemon(true);
@@ -87,7 +85,7 @@ public class OSystemDBImporter extends Thread {
       	}    	
       }
     } catch (Exception ex) {
-      OLogManager.instance().error(this, "run() Exception: %s", ex.getMessage());
+      OLogManager.instance().error(this, "run() Exception: %s", ex, ex.getMessage());
     }
   }
   
@@ -99,7 +97,7 @@ public class OSystemDBImporter extends Thread {
       db = ODefaultAuditing.openImporterDatabase(server, dbName);
       
       if(db == null) {
-        OLogManager.instance().error(this, "importDB() Unable to import auditing log for database: %s", dbName);
+        OLogManager.instance().error(this, "importDB() Unable to import auditing log for database: %s", null, dbName);
         return;
       }
       
@@ -169,7 +167,7 @@ public class OSystemDBImporter extends Thread {
       	   db.activateOnCurrentThread();
         	   db.delete(doc);
           } catch (Exception ex) {
-            OLogManager.instance().error(this, "importDB() Inner Exception: %s", ex.getMessage());  	
+            OLogManager.instance().error(this, "importDB() Inner Exception: %s", ex, ex.getMessage());
           }
         }
 
@@ -186,7 +184,7 @@ public class OSystemDBImporter extends Thread {
   	 	OLogManager.instance().info(this, "Completed importing of %d auditing log %s from database: %s", totalImported, totalImported == 1 ? "record" : "records", dbName);
   	 	
     } catch (Exception ex) {
-      OLogManager.instance().error(this, "importDB() Exception: %s", ex.getMessage());
+      OLogManager.instance().error(this, "importDB() Exception: %s", ex, ex.getMessage());
     } finally {
     	if(sysdb != null) {
     	  sysdb.activateOnCurrentThread();

@@ -19,22 +19,17 @@
  */
 package com.orientechnologies.security.ldap;
 
+import com.orientechnologies.common.log.OLogManager;
+
+import javax.naming.Context;
+import javax.naming.NamingEnumeration;
+import javax.naming.directory.*;
+import javax.security.auth.Subject;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.security.PrivilegedAction;
-
 import java.util.Hashtable;
 import java.util.List;
-
-import javax.naming.*;
-import javax.naming.directory.*; // Attribute, Attributes, DirContext
-import javax.naming.directory.SearchControls;
-import javax.naming.directory.SearchResult;
-import javax.naming.NamingEnumeration;
-import javax.security.auth.Subject;
-
-
-import com.orientechnologies.common.log.OLogManager;
 
 /**
  * LDAP Library
@@ -146,7 +141,7 @@ public class OLDAPLibrary
 			}
 			else
 			{
-				if(debug) OLogManager.instance().error(null, "OLDAPLibrary.retrieveUsers() DirContext is null");
+				if(debug) OLogManager.instance().error(null, "OLDAPLibrary.retrieveUsers() DirContext is null", null);
 			}
 		}
 		catch(Exception ex)
@@ -218,7 +213,7 @@ public class OLDAPLibrary
 			}
 			else
 			{
-				if(debug) OLogManager.instance().error(null, "OLDAPLibrary.traverse() Unable to find attributes for startingDN: %s", startingDN);				
+				if(debug) OLogManager.instance().error(null, "OLDAPLibrary.traverse() Unable to find attributes for startingDN: %s", null, startingDN);
 			}
 		}
 		catch(Exception ex)
@@ -277,7 +272,7 @@ public class OLDAPLibrary
 			}
 			else
 			{
-				OLogManager.instance().error(null, "OLDAPLibrary.findMembers() Unable to find attributes for startingDN: %s", startingDN);				
+				OLogManager.instance().error(null, "OLDAPLibrary.findMembers() Unable to find attributes for startingDN: %s", null, startingDN);
 			}
 		}
 		catch(Exception ex)
@@ -327,7 +322,7 @@ public class OLDAPLibrary
 		}
 		catch(Exception ex)
 		{
-			OLogManager.instance().error(null, "OLDAPLibrary fillAttributeList(" + name + ") Exception: " + ex);
+			OLogManager.instance().error(null, "OLDAPLibrary fillAttributeList(" + name + ") Exception: " + ex, null);
 		}
 	}
 	
@@ -344,7 +339,7 @@ public class OLDAPLibrary
 		}
 		catch(Exception ex)
 		{
-			OLogManager.instance().error(null, "OLDAPLibrary.getFirstValue(" + name + ") Exception: " + ex);
+			OLogManager.instance().error(null, "OLDAPLibrary.getFirstValue(" + name + ") Exception: " + ex, null);
 		}
 		
 		return null;
@@ -403,12 +398,12 @@ public class OLDAPLibrary
 			}
 			else
 			{
-				OLogManager.instance().error(null, "OLDAPLibrary.isMemberOf() Has no 'memberOf' attribute.");
+				OLogManager.instance().error(null, "OLDAPLibrary.isMemberOf() Has no 'memberOf' attribute.", null);
 			}
 		}
 		catch(Exception ex)
 		{
-			OLogManager.instance().error(null, "OLDAPLibrary.isMemberOf() Exception: %s", ex.getMessage());
+			OLogManager.instance().error(null, "OLDAPLibrary.isMemberOf() Exception: %s", ex, ex.getMessage());
 		}
 		
 		return false;	

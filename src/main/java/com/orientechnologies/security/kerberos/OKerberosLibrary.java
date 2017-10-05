@@ -19,18 +19,11 @@
  */
 package com.orientechnologies.security.kerberos;
 
-import java.security.PrivilegedAction;
-import javax.security.auth.Subject;
-
-import org.ietf.jgss.GSSContext;
-import org.ietf.jgss.GSSCredential;
-import org.ietf.jgss.GSSException;
-import org.ietf.jgss.GSSManager;
-import org.ietf.jgss.GSSName;
-import org.ietf.jgss.Oid;
-
-
 import com.orientechnologies.common.log.OLogManager;
+import org.ietf.jgss.*;
+
+import javax.security.auth.Subject;
+import java.security.PrivilegedAction;
 
 /**
  * Kerberos Authentication Library
@@ -192,7 +185,7 @@ OLogManager.instance().info(this, "OKerberosLibrary.getSPNegoSource() context sr
 						}
 						else
 						{
-							OLogManager.instance().error(this, "OKerberosLibrary.getSPNegoSource() Could not create a GSSContext");
+							OLogManager.instance().error(this, "OKerberosLibrary.getSPNegoSource() Could not create a GSSContext", null);
 						}
 					}
 					catch(Exception ex)
@@ -247,7 +240,7 @@ OLogManager.instance().info(this, "OKerberosLibrary.getSPNegoSource() context sr
 						}
 						else
 						{
-							OLogManager.instance().error(this, "getKerberosSource() Could not create a GSSContext");
+							OLogManager.instance().error(this, "getKerberosSource() Could not create a GSSContext", null);
 						}
 					}
 					catch(Exception ex)
