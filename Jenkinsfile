@@ -2,6 +2,12 @@
 node("master") {
     def mvnHome = tool 'mvn'
     def mvnJdk7Image = "orientdb/mvn-gradle-zulu-jdk-7"
+    
+    def containerName = env.JOB_NAME.replaceAll(/\//, "_") + 
+            "_build_${currentBuild.number}"
+			
+    def appNameLabel = "docker_ci";
+    def taskLabel = env.JOB_NAME.replaceAll(/\//, "_")
 
     stage('Source checkout') {
 
@@ -9,7 +15,8 @@ node("master") {
     }
 
     stage('Tests on Java7') {
-        docker.image("${mvnJdk7Image}").inside("--memory=4g ${env.VOLUMES}") {
+        docker.image("${mvnJdk7Image}").inside("--label collectd_docker_app=${appNameLabel} --label collectd_docker_task=${taskLabel} " + 
+                                               "--name ${containerName} --memory=4g ${env.VOLUMES}") {
             try {
 
                 sh "${mvnHome}/bin/mvn  --batch-mode -V -U  clean install  -Dsurefire.useFile=false"
