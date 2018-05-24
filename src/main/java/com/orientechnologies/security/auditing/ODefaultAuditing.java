@@ -46,29 +46,29 @@ import java.util.concurrent.ConcurrentHashMap;
  * Created by Enrico Risa on 10/04/15.
  */
 public class ODefaultAuditing implements OAuditingService, ODatabaseLifecycleListener, ODistributedLifecycleListener {
-  public static final String         AUDITING_LOG_CLASSNAME          = "OAuditingLog";
+  public static final String AUDITING_LOG_CLASSNAME = "OAuditingLog";
 
-  private boolean                    enabled                         = true;
-  private OServer                    server;
+  private boolean enabled = true;
+  private OServer server;
 
-  private OAuditingHook              globalHook;
+  private OAuditingHook globalHook;
 
   private Map<String, OAuditingHook> hooks;
 
-  protected static final String      DEFAULT_FILE_AUDITING_DB_CONFIG = "default-auditing-config.json";
-  protected static final String      FILE_AUDITING_DB_CONFIG         = "auditing-config.json";
+  protected static final String DEFAULT_FILE_AUDITING_DB_CONFIG = "default-auditing-config.json";
+  protected static final String FILE_AUDITING_DB_CONFIG         = "auditing-config.json";
 
-  private OAuditingDistribConfig     distribConfig;
+  private OAuditingDistribConfig distribConfig;
 
-  private OSystemDBImporter          systemDbImporter;
-  private static final String        IMPORTER_FLAG                   = "AUDITING_IMPORTER";
+  private              OSystemDBImporter systemDbImporter;
+  private static final String            IMPORTER_FLAG = "AUDITING_IMPORTER";
 
   private class OAuditingDistribConfig extends OAuditingConfig {
     private boolean onNodeJoinedEnabled = false;
     private String  onNodeJoinedMessage = "The node ${node} has joined";
 
-    private boolean onNodeLeftEnabled   = false;
-    private String  onNodeLeftMessage   = "The node ${node} has left";
+    private boolean onNodeLeftEnabled = false;
+    private String  onNodeLeftMessage = "The node ${node} has left";
 
     public OAuditingDistribConfig(final ODocument cfg) {
       if (cfg.containsField("onNodeJoinedEnabled"))
@@ -145,8 +145,12 @@ public class ODefaultAuditing implements OAuditingService, ODatabaseLifecycleLis
           auditingFileConfig.createNewFile();
 
           final FileOutputStream f = new FileOutputStream(auditingFileConfig);
-          f.write(content.getBytes());
-          f.flush();
+          try {
+            f.write(content.getBytes());
+            f.flush();
+          } finally {
+            f.close();
+          }
         } catch (IOException e) {
           content = "{}";
           OLogManager.instance().error(this, "Cannot save auditing file configuration", e);
@@ -269,8 +273,12 @@ public class ODefaultAuditing implements OAuditingService, ODatabaseLifecycleLis
     final File auditingFileConfig = getConfigFile(iDatabaseName);
     if (auditingFileConfig != null) {
       final FileOutputStream f = new FileOutputStream(auditingFileConfig);
-      f.write(cfg.toJSON("prettyPrint=true").getBytes());
-      f.flush();
+      try {
+        f.write(cfg.toJSON("prettyPrint=true").getBytes());
+        f.flush();
+      } finally {
+        f.close();
+      }
     }
   }
 
@@ -351,8 +359,9 @@ public class ODefaultAuditing implements OAuditingService, ODatabaseLifecycleLis
       }
     } else { // Use the global hook.
       if (globalHook == null)
-        OLogManager.instance().error(this, "Default Auditing is disabled, cannot log: op=%s db='%s' user=%s message='%s'",
-            null, operation, dbName, username, message);
+        OLogManager.instance()
+            .error(this, "Default Auditing is disabled, cannot log: op=%s db='%s' user=%s message='%s'", null, operation, dbName,
+                username, message);
       else
         globalHook.log(operation, dbName, username, message);
     }
@@ -382,7 +391,8 @@ public class ODefaultAuditing implements OAuditingService, ODatabaseLifecycleLis
     } catch (Exception e) {
       OLogManager.instance().error(this, "Creating auditing class exception: %s", e, e.getMessage());
     } finally {
-    	if (sysdb != null) sysdb.close();    	
+      if (sysdb != null)
+        sysdb.close();
 
       if (currentDB != null)
         ODatabaseRecordThreadLocal.INSTANCE.set(currentDB);
