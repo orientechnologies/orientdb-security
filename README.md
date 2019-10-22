@@ -13,7 +13,7 @@ Syslog support is also now integrated as part of auditing and can be configured 
 
 Complete documentation on how to use and configure the new OrientDB Security plugin can be found here:
 
-[OrientDB New Security Features](https://github.com/orientechnologies/orientdb-labs/blob/master/Security-OrientDB-New-Security-Features.md)
+[OrientDB New Security Features](http://orientdb.com/docs/3.0.x/security/Security-OrientDB-New-Security-Features.html)
 
 To use the new OrientDB Security plugin, build the project's jar file (a Maven pom.xml is provided) and copy it to the *plugins* directory of your OrientDB installation.
 
